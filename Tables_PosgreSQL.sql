@@ -1,86 +1,81 @@
 CREATE TABLE Baker(
-Baker_ID SERIAL NOT NULL,
-Baker_Fname varchar(30) NOT NULL,
-Baker_Lname varchar(30) NOT NULL,
-Baker_Email varchar(30) NOT NULL,
-Baker_Phone varchar(20) NOT NULL,
-Baker_Password varchar(30) NOT NULL,
-BakerPayPal_ID varchar(30) NOT NULL,
-Baker_License varchar(30) NOT NULL,
-PRIMARY KEY (Baker_ID)
-)
+baker_ID SERIAL PRIMARY KEY NOT NULL,
+baker_Fname TEXT NOT NULL,
+baker_Lname TEXT NOT NULL,
+baker_Email TEXT NOT NULL,
+baker_Phone TEXT NOT NULL,
+baker_Password TEXT NOT NULL,
+bakerPayPal_ID TEXT NOT NULL,
+baker_License TEXT NOT NULL
+);
 
 CREATE TABLE Bakery(
-Bakery_ID SERIAL NOT NULL,
-Baker_ID int NOT NULL REFERENCES BAKER(Baker_ID),
-Bakery_Name varchar(30) NOT NULL,
-Bakery_Address varchar(30) NOT NULL,
-Bakery_Offline boolean NOT NULL,
-Close_Time varchar(10) NOT NULL,
-Open_Time varchar(10) NOT NULL,
-Delivery int NOT NULL,
-Phone_Number varchar(20) NOT NULL,
-PRIMARY KEY (Bakery_ID)
-)
+bakery_ID SERIAL PRIMARY KEY NOT NULL,
+baker_ID int NOT NULL REFERENCES Baker(baker_ID),
+bakery_Name TEXT NOT NULL,
+bakery_Address TEXT NOT NULL,
+bakery_Offline boolean NOT NULL,
+close_Time TEXT NOT NULL,
+open_Time TEXT NOT NULL,
+delivery int NOT NULL,
+phone_Number TEXT NOT NULL
+);
 
 CREATE TABLE Product(
-Product_ID SERIAL NOT NULL,
-Bakery_ID int NOT NULL REFERENCES Bakery(Bakery_ID),
-Pname varchar(30) NOT NULL,
-Price varchar(10) NOT NULL,
-Picture varchar(30) NOT NULL,
-Description varchar(140) NOT NULL, --Length of a tweet sufficient for description
-Product_Type varchar(10) NOT NULL,
-PRIMARY KEY (Product_ID)
-)
+product_ID SERIAL PRIMARY KEY NOT NULL,
+bakery_ID int NOT NULL REFERENCES Bakery(bakery_ID),
+pname TEXT NOT NULL,
+price TEXT NOT NULL,
+picture TEXT NOT NULL,
+description TEXT NOT NULL,
+product_Type TEXT NOT NULL
+);
 
 CREATE TABLE Allergens(
-Product_ID SERIAL NOT NULL REFERENCES Product(Product_ID),
-Allergy_Type varchar(30) NOT NULL,
-PRIMARY KEY (Product_ID, Allergy_Type)
-)
+product_ID SERIAL NOT NULL REFERENCES Product(product_ID),
+allergy_Type TEXT NOT NULL,
+PRIMARY KEY (product_ID, allergy_Type)
+);
 
 CREATE TABLE Users(
-User_ID SERIAL NOT NULL,
-User_Fname varchar(30) NOT NULL,
-User_Lname varchar(30) NOT NULL,
-Saved_Address varchar(30),
-User_Email varchar(30) NOT NULL,
-User_Phone varchar(20) NOT NULL,
-User_Password varchar(30) NOT NULL,
-UserPayPal_ID varchar(30) NOT NULL,
-PRIMARY KEY (User_ID)
-)
+user_ID SERIAL PRIMARY KEY NOT NULL,
+user_Fname TEXT NOT NULL,
+user_Lname TEXT NOT NULL,
+saved_Address TEXT,
+user_Email TEXT NOT NULL,
+user_Phone TEXT NOT NULL,
+user_Password TEXT NOT NULL,
+userPayPal_ID TEXT NOT NULL
+);
 
 CREATE TABLE BakeryFeedback(
-Bakery_ID SERIAL NOT NULL REFERENCES Bakery(Bakery_ID),
-User_ID int NOT NULL REFERENCES Users(User_ID),
-Text varchar(140) NOT NULL,
-Feedback_Date DATE NOT NULL,
-PRIMARY KEY (Bakery_ID, User_ID)
-)
+bakery_ID SERIAL NOT NULL REFERENCES Bakery(bakery_ID),
+user_ID int NOT NULL REFERENCES Users(user_ID),
+entry TEXT NOT NULL,
+feedback_Date DATE NOT NULL,
+PRIMARY KEY (bakery_ID, user_ID)
+);
 
 CREATE TABLE Rating(
-Product_ID SERIAL NOT NULL REFERENCES Product(Product_ID),
-User_ID int NOT NULL REFERENCES Users(User_ID),
-Text varchar(140),
-Rating_Value int NOT NULL,
-Rating_Date DATE NOT NULL,
-PRIMARY KEY (Product_ID, User_ID)
-)
+product_ID SERIAL NOT NULL REFERENCES Product(product_ID),
+user_ID int NOT NULL REFERENCES Users(user_ID),
+entry TEXT,
+rating_Value int NOT NULL,
+rating_Date DATE NOT NULL,
+PRIMARY KEY (product_ID, user_ID)
+);
 
 CREATE TABLE Orders(
-Order_ID SERIAL NOT NULL,
-User_ID int NOT NULL REFERENCES Users(User_ID),
-Status int NOT NULL,
-Order_Date DATE NOT NULL,
-Order_Address varchar(30) NOT NULL,
-PRIMARY KEY (Order_ID)
-)
+order_ID SERIAL PRIMARY KEY NOT NULL,
+user_ID int NOT NULL REFERENCES Users(user_ID),
+status int NOT NULL,
+order_Date DATE NOT NULL,
+order_Address TEXT NOT NULL
+);
 
 CREATE TABLE Order_Content(
-Order_ID SERIAL NOT NULL REFERENCES Orders(Order_ID),
-Product_ID int NOT NULL REFERENCES Product(Product_ID),
-Quantity int NOT NULL,
-PRIMARY KEY (Order_ID, Product_ID)
-)
+order_ID SERIAL NOT NULL REFERENCES Orders(order_ID),
+product_ID int NOT NULL REFERENCES Product(product_ID),
+quantity int NOT NULL,
+PRIMARY KEY (order_ID, product_ID)
+);
